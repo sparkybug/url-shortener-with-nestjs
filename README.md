@@ -1,98 +1,184 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# URL Shortener API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+A simple URL shortener REST API built with NestJS. Give it a long URL, get back a short code. Hit the short code, get redirected. Check how many times a link has been clicked. That's it.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+Built as a weekend learning project to get hands-on with NestJS fundamentals and test-driven development.
 
-## Description
+## Tech Stack
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+| Technology | Why |
+|---|---|
+| **NestJS** | Opinionated Node.js framework with great structure for building APIs |
+| **TypeScript** | Type safety and better DX out of the box |
+| **TypeORM** | Decorator-based ORM that pairs well with NestJS modules |
+| **SQLite** | Zero-config database, perfect for local dev (swappable to Postgres) |
+| **Jest** | Built-in test runner with good mocking support |
+| **class-validator** | Declarative DTO validation via decorators |
 
-## Project setup
+## Features
 
-```bash
-$ npm install
-```
+- Shorten any valid URL and receive a unique 6-character code
+- Redirect to the original URL when the short code is visited
+- Track click counts per shortened URL
+- Input validation — rejects malformed URLs with a 400 response
+- Stats endpoint to check how many times a link has been accessed
+- Simple static frontend served at the root path
 
-## Compile and run the project
+## Getting Started
 
-```bash
-# development
-$ npm run start
+### Prerequisites
 
-# watch mode
-$ npm run start:dev
+- Node.js >= 18
+- npm >= 9
 
-# production mode
-$ npm run start:prod
-```
-
-## Run tests
+### Installation
 
 ```bash
-# unit tests
-$ npm run test
+# Clone the repository
+git clone https://github.com/your-username/url-shortener.git
+cd url-shortener
 
-# e2e tests
-$ npm run test:e2e
+# Install dependencies
+npm install
 
-# test coverage
-$ npm run test:cov
+# Create your environment file
+cp .env.example .env
 ```
 
-## Deployment
+Edit `.env` with your preferred values (see [Environment Variables](#environment-variables) below).
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+### Running in Development
 
 ```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+npm run start:dev
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+The server starts on `http://localhost:3000` by default (or whatever port you set in `.env`).
 
-## Resources
+### Running Tests
 
-Check out a few resources that may come in handy when working with NestJS:
+```bash
+# Unit tests
+npm run test
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+# Unit tests in watch mode
+npm run test:watch
 
-## Support
+# End-to-end tests
+npm run test:e2e
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+# Test coverage report
+npm run test:cov
+```
 
-## Stay in touch
+## API Reference
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+### POST /shorten
 
-## License
+Create a shortened URL.
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+| Field | Details |
+|---|---|
+| **Method** | `POST` |
+| **Path** | `/shorten` |
+| **Body** | `{ "url": "https://example.com/some/long/path" }` |
+| **Success** | `201 Created` |
+
+**Example response:**
+
+```json
+{
+  "shortCode": "a1b2c3"
+}
+```
+
+**Error (invalid URL):** `400 Bad Request`
+
+---
+
+### GET /:code
+
+Redirect to the original URL.
+
+| Field | Details |
+|---|---|
+| **Method** | `GET` |
+| **Path** | `/:code` |
+| **Success** | `302 Found` (redirects to the original URL) |
+| **Error** | `404 Not Found` (code doesn't exist) |
+
+---
+
+### GET /stats/:code
+
+Get click statistics for a shortened URL.
+
+| Field | Details |
+|---|---|
+| **Method** | `GET` |
+| **Path** | `/stats/:code` |
+| **Success** | `200 OK` |
+| **Error** | `404 Not Found` |
+
+**Example response:**
+
+```json
+{
+  "originalUrl": "https://example.com/some/long/path",
+  "clicks": 14
+}
+```
+
+## Project Structure
+
+```
+url-shortener/
+├── src/
+│   ├── main.ts                    # App entry point, bootstrap + global pipes
+│   ├── app.module.ts              # Root module (TypeORM, Config, URL module)
+│   ├── app.controller.ts          # Root health/info controller
+│   ├── app.service.ts             # Root service
+│   └── url/
+│       ├── url.module.ts          # URL feature module
+│       ├── url.controller.ts      # Route handlers (shorten, redirect, stats)
+│       ├── url.service.ts         # Business logic (shorten, resolve, getStats)
+│       ├── url.entity.ts          # TypeORM entity definition
+│       ├── url.service.spec.ts    # Unit tests for the service layer
+│       ├── url.controller.spec.ts # Unit tests for the controller
+│       └── dto/
+│           └── create-url.dto.ts  # Input validation DTO
+├── test/
+│   ├── app.e2e-spec.ts           # End-to-end HTTP tests
+│   └── jest-e2e.json             # Jest config for e2e tests
+├── public/
+│   └── index.html                # Simple frontend UI
+├── .env                          # Environment variables (not committed)
+├── package.json
+├── tsconfig.json
+└── nest-cli.json
+```
+
+## Environment Variables
+
+| Variable | Description | Example |
+|---|---|---|
+| `PORT` | Port the server listens on | `3000` |
+| `DATABASE_PATH` | Path to the SQLite database file | `db.sqlite` |
+
+Create a `.env` file in the project root:
+
+```env
+PORT=3000
+DATABASE_PATH=db.sqlite
+```
+
+## What I Learned
+
+I built this over a weekend to get NestJS concepts into my hands rather than just reading docs. Here's what actually clicked:
+
+- **Modules as boundaries** — NestJS forces you to think about where things live. The `UrlModule` encapsulates everything related to URL shortening, and the root module just wires things together.
+- **Dependency injection** — Once I stopped fighting it and let the framework inject services and repositories, testing became trivial. Swapping a real DB for a mock in tests is just one provider override.
+- **DTOs and validation pipes** — Declarative validation with `class-validator` means the controller never has to manually check inputs. Invalid requests get rejected before my code even runs.
+- **Test-driven development** — Writing the service tests first (with a mocked repository) forced me to think about the interface before the implementation. The e2e tests then confirmed the whole stack works together.
+- **TypeORM integration** — The `forRootAsync` pattern for async config loading was confusing at first, but it makes sense once you see how `ConfigService` ties into it.
+- **The decorator pattern** — Routes, params, body parsing — everything is a decorator. It felt verbose at first but keeps controllers clean and readable.
