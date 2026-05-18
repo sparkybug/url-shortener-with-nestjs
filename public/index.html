@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Shortener</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #0f172a;
+            color: #e2e8f0;
+            padding: 1rem;
+        }
+        .container {
+            width: 100%;
+            max-width: 480px;
+            text-align: center;
+        }
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            color: #f8fafc;
+        }
+        p.subtitle {
+            color: #94a3b8;
+            margin-bottom: 2rem;
+        }
+        .input-group {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+        input {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            background: #1e293b;
+            color: #f8fafc;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        input:focus { border-color: #6366f1; }
+        button {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            background: #6366f1;
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        button:hover { background: #4f46e5; }
+        button:disabled { opacity: 0.5; cursor: not-allowed; }
+        .result {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            padding: 1.25rem;
+            display: none;
+        }
+        .result.show { display: block; }
+        .result a {
+            color: #818cf8;
+            font-size: 1.25rem;
+            font-weight: 600;
+            word-break: break-all;
+        }
+        .result .stats {
+            margin-top: 0.75rem;
+            color: #94a3b8;
+            font-size: 0.875rem;
+        }
+        .error {
+            color: #f87171;
+            margin-bottom: 1rem;
+            display: none;
+        }
+        .error.show { display: block; }
+        .stats-section {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid #334155;
+        }
+        .stats-result {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            padding: 1.25rem;
+            margin-top: 1rem;
+            display: none;
+            text-align: left;
+        }
+        .stats-result.show { display: block; }
+        .stats-result p { margin-bottom: 0.5rem; }
+        .stats-result .label { color: #94a3b8; font-size: 0.875rem; }
+        .stats-result .value { color: #f8fafc; font-weight: 600; word-break: break-all; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>URL Shortener</h1>
+        <p class="subtitle">Paste a long URL and get a short one</p>
+
+        <div class="error" id="error"></div>
+
+        <div class="input-group">
+            <input type="text" id="urlInput" placeholder="https://your-long-url.com/...">
+            <button id="shortenBtn" onclick="shortenUrl()">Shorten</button>
+        </div>
+
+        <div class="result" id="result">
+            <a id="shortLink" href="#" target="_blank"></a>
+            <p class="stats">Click the link or copy it to share</p>
+        </div>
+
+        <div class="stats-section">
+            <div class="input-group">
+                <input type="text" id="codeInput" placeholder="Enter short code for stats">
+                <button onclick="getStats()">Stats</button>
+            </div>
+            <div class="stats-result" id="statsResult">
+                <p><span class="label">Original URL:</span><br><span class="value" id="statsUrl"></span></p>
+                <p><span class="label">Clicks:</span><br><span class="value" id="statsClicks"></span></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const BASE = window.location.origin;
+
+        async function shortenUrl() {
+            const input = document.getElementById('urlInput');
+            const error = document.getElementById('error');
+            const result = document.getElementById('result');
+            const shortLink = document.getElementById('shortLink');
+
+            error.classList.remove('show');
+            result.classList.remove('show');
+
+            const url = input.value.trim();
+            if (!url) return;
+
+            try {
+                const res = await fetch(`${BASE}/shorten`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ url }),
+                });
+
+                if (!res.ok) {
+                    const data = await res.json();
+                    error.textContent = data.message || 'Please enter a valid URL';
+                    error.classList.add('show');
+                    return;
+                }
+
+                const data = await res.json();
+                const fullShortUrl = `${BASE}/${data.shortCode}`;
+                shortLink.href = fullShortUrl;
+                shortLink.textContent = fullShortUrl;
+                result.classList.add('show');
+            } catch (e) {
+                error.textContent = 'Something went wrong. Try again.';
+                error.classList.add('show');
+            }
+        }
+
+        async function getStats() {
+            const input = document.getElementById('codeInput');
+            const statsResult = document.getElementById('statsResult');
+            const statsUrl = document.getElementById('statsUrl');
+            const statsClicks = document.getElementById('statsClicks');
+
+            statsResult.classList.remove('show');
+            const code = input.value.trim();
+            if (!code) return;
+
+            try {
+                const res = await fetch(`${BASE}/stats/${code}`);
+                if (!res.ok) {
+                    statsUrl.textContent = 'Not found';
+                    statsClicks.textContent = '-';
+                    statsResult.classList.add('show');
+                    return;
+                }
+                const data = await res.json();
+                statsUrl.textContent = data.originalUrl;
+                statsClicks.textContent = data.clicks;
+                statsResult.classList.add('show');
+            } catch (e) {
+                statsUrl.textContent = 'Error loading stats';
+                statsClicks.textContent = '-';
+                statsResult.classList.add('show');
+            }
+        }
+
+        document.getElementById('urlInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') shortenUrl();
+        });
+        document.getElementById('codeInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') getStats();
+        });
+    </script>
+</body>
+</html>
