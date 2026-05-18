@@ -180,9 +180,9 @@ DATABASE_PATH=db.sqlite
 
 I built this over a weekend to get NestJS concepts into my hands rather than just reading docs. Here's what actually clicked:
 
-- **Modules as boundaries** — NestJS forces you to think about where things live. The `UrlModule` encapsulates everything related to URL shortening, and the root module just wires things together.
-- **Dependency injection** — Once I stopped fighting it and let the framework inject services and repositories, testing became trivial. Swapping a real DB for a mock in tests is just one provider override.
-- **DTOs and validation pipes** — Declarative validation with `class-validator` means the controller never has to manually check inputs. Invalid requests get rejected before my code even runs.
-- **Test-driven development** — Writing the service tests first (with a mocked repository) forced me to think about the interface before the implementation. The e2e tests then confirmed the whole stack works together.
-- **TypeORM integration** — The `forRootAsync` pattern for async config loading was confusing at first, but it makes sense once you see how `ConfigService` ties into it.
-- **The decorator pattern** — Routes, params, body parsing — everything is a decorator. It felt verbose at first but keeps controllers clean and readable.
+- **Modules as boundaries**: NestJS forces you to think about where things live. The `UrlModule` encapsulates everything related to URL shortening, and the root module just wires things together.
+- **Dependency injection**: Once I stopped fighting it and let the framework inject services and repositories, testing became trivial. Swapping a real DB for a mock in tests is just one provider override.
+- **DTOs and validation pipes**: Declarative validation with `class-validator` means the controller never has to manually check inputs. Invalid requests get rejected before my code even runs.
+- **Test-driven development**: Writing the service tests first (with a mocked repository) forced me to think about the interface before the implementation. The e2e tests then confirmed the whole stack works together.
+- **TypeORM integration**: The `forRootAsync` pattern for async config loading was confusing at first, but it makes sense once you see how `ConfigService` ties into it.
+- **The decorator pattern**: Routes, params, body parsing — everything is a decorator. It felt verbose at first but keeps controllers clean and readable.
