@@ -55,6 +55,10 @@ npm run start:dev
 
 The server starts on `http://localhost:3000` by default (or whatever port you set in `.env`).
 
+### Try It in the Browser
+
+Once the server is running, open [http://localhost:3000/app](http://localhost:3000/app) in your browser. The app serves a frontend where you can shorten URLs, get redirected, and view click stats — no API client needed.
+
 ### Running Tests
 
 ```bash
